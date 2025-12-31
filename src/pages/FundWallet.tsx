@@ -8,7 +8,6 @@ import SuccessModal from '../components/Common/SuccessModal';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 
 const FundWallet = () => {
-  const navigate = useNavigate();
   const accounts = useWalletStore((state) => state.accounts);
   const isLoading = useWalletStore((state) => state.isLoading);
   const error = useWalletStore((state) => state.error);

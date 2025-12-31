@@ -16,7 +16,6 @@ interface DummyUser {
 }
 
 const Transfer = () => {
-  const navigate = useNavigate();
   const accounts = useWalletStore((state) => state.accounts);
   const isLoading = useWalletStore((state) => state.isLoading);
   const error = useWalletStore((state) => state.error);
