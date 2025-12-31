@@ -141,61 +141,6 @@ const RightSidebar = () => {
           </div>
         </div>
       </div>
-
-      {/* Notification Card */}
-      <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl shadow-sm border border-yellow-200 p-4 md:p-6 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-            }}
-          ></div>
-        </div>
-        <div className="relative z-10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="notify"
-                className="w-4 h-4 text-[#172030] rounded focus:ring-[#172030]"
-              />
-              <label htmlFor="notify" className="text-sm font-medium text-gray-700">
-                Notify me
-              </label>
-            </div>
-          </div>
-          <div className="bg-white rounded-lg p-4 mb-4">
-            <p className="text-xs text-gray-500 mb-1">{format(new Date(), 'dd.MM.yyyy')}</p>
-            <h4 className="text-sm font-semibold text-gray-900 mb-3">
-              Financial tips webinar
-            </h4>
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="w-6 h-6 rounded-full bg-[#172030] border-2 border-white"
-                  ></div>
-                ))}
-              </div>
-              <span className="text-xs text-gray-600">+10 participants</span>
-            </div>
-          </div>
-          <button
-            onClick={() => {
-              window.dispatchEvent(new CustomEvent('show-feature-not-available', { detail: { message: 'Webinar details feature does not exist yet' } }));
-            }}
-            className="w-full bg-[#172030] hover:opacity-90 text-white py-2 px-4 rounded-lg font-medium text-sm transition-opacity flex items-center justify-center gap-2"
-          >
-            <span>View Details</span>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

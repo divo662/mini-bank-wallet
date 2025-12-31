@@ -24,9 +24,6 @@ const Dashboard = () => {
       setError(null);
 
       try {
-        // Simulate network delay for better UX (even if data is local)
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
         // Load accounts from localStorage first, fallback to JSON
         let accountsData: any[] = [];
         let accountsError: Error | null = null;
