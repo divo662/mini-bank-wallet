@@ -1,0 +1,33 @@
+[
+  {
+    "id": "user-1",
+    "name": "John Doe",
+    "accountNumber": "1234567890",
+    "bank": "First Bank"
+  },
+  {
+    "id": "user-2",
+    "name": "Jane Smith",
+    "accountNumber": "2345678901",
+    "bank": "Access Bank"
+  },
+  {
+    "id": "user-3",
+    "name": "Michael Johnson",
+    "accountNumber": "3456789012",
+    "bank": "GTBank"
+  },
+  {
+    "id": "user-4",
+    "name": "Sarah Williams",
+    "accountNumber": "4567890123",
+    "bank": "Zenith Bank"
+  },
+  {
+    "id": "user-5",
+    "name": "David Brown",
+    "accountNumber": "5678901234",
+    "bank": "UBA"
+  }
+]
+
