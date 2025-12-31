@@ -12,7 +12,7 @@ interface SuccessModalProps {
 const SuccessModal = ({ 
   isOpen, 
   message, 
-  onClose, 
+  onClose: _onClose, 
   redirectTo = '/',
   redirectDelay = 2000 
 }: SuccessModalProps) => {

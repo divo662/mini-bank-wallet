@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useWalletStore } from '../store/useWalletStore';
 import Layout from '../components/Layout/Layout';
 import { formatCurrency } from '../utils/validation';
-import { TRANSACTION_CATEGORIES } from '../utils/categories';
 import type { Transaction } from '../types';
 import PINModal from '../components/Common/PINModal';
 import SuccessModal from '../components/Common/SuccessModal';
@@ -400,14 +398,14 @@ const FundWallet = () => {
               <button
                 type="button"
                 onClick={handleContinue}
-                disabled={step === 'processing' || isProcessing}
+                disabled={isProcessing}
                 className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-lg font-medium transition-opacity text-base sm:text-lg ${
-                  step === 'processing' || isProcessing
+                  isProcessing
                     ? 'bg-gray-400 text-white cursor-not-allowed'
                     : 'bg-[#172030] text-white hover:opacity-90 active:opacity-80'
                 }`}
               >
-                {step === 'processing' || isProcessing ? 'Processing...' : 'Continue'}
+                {isProcessing ? 'Processing...' : 'Continue'}
               </button>
             </div>
           )}

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useWalletStore } from '../../store/useWalletStore';
 import { formatCurrency } from '../../utils/validation';
 import { useMemo } from 'react';
-import { format, startOfMonth } from 'date-fns';
+import { startOfMonth } from 'date-fns';
 
 const RightSidebar = () => {
   const transactions = useWalletStore((state) => state.transactions);
@@ -120,7 +120,7 @@ const RightSidebar = () => {
                     : 'bg-gradient-to-r from-red-500 to-orange-500'
                 }`}
                 style={{ 
-                  width: `${Math.min(Math.abs(stats.percentageChange), 100)}%` 
+                  width: `${Math.min(Math.abs(parseFloat(stats.percentageChange)), 100)}%` 
                 }}
               ></div>
             </div>

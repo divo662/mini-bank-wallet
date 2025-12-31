@@ -15,7 +15,6 @@ export const transferSchema = z.object({
     )
     .refine(
       (val) => {
-        const num = parseFloat(val);
         const decimalPlaces = val.split('.')[1]?.length || 0;
         return decimalPlaces <= 2;
       },

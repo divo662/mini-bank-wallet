@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useWalletStore } from '../../store/useWalletStore';
-import { TRANSACTION_CATEGORIES, getCategoryLabel } from '../../utils/categories';
+import { TRANSACTION_CATEGORIES } from '../../utils/categories';
 import FilterModal from './FilterModal';
 
 const Filters = () => {

@@ -1,5 +1,4 @@
 import { useWalletStore } from '../../store/useWalletStore';
-import { formatCurrency } from '../../utils/validation';
 
 const AccountCards = () => {
   const accounts = useWalletStore((state) => state.accounts);
