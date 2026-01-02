@@ -2,6 +2,7 @@ import { useWalletStore } from '../../store/useWalletStore';
 
 const AccountCards = () => {
   const accounts = useWalletStore((state) => state.accounts);
+  const user = useWalletStore((state) => state.user);
 
   const getCardNumber = (accountId: string) => {
     // Generate a card number based on account ID
@@ -94,7 +95,9 @@ const AccountCards = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-white/80 mb-1">Card Holder</p>
-                  <p className="text-sm font-semibold">Saikat</p>
+                  <p className="text-sm font-semibold">
+                    {user?.firstName || 'User'} {user?.lastName || ''}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-white/80 mb-1">Expires</p>

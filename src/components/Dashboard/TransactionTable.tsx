@@ -22,18 +22,11 @@ const TransactionTable = ({}: TransactionTableProps = {}) => {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   
-  const filteredTransactions = useMemo(() => {
-    // Start with all transactions
-    if (!transactions || transactions.length === 0) {
-      return [];
-    }
+  const getFilteredTransactions = useWalletStore((state) => state.getFilteredTransactions);
 
-    // Sort by date (newest first) - use timestamp if available for accurate sorting
-    let filtered = [...transactions].sort((a, b) => {
-      const dateA = a.timestamp ? new Date(a.timestamp).getTime() : new Date(a.date).getTime();
-      const dateB = b.timestamp ? new Date(b.timestamp).getTime() : new Date(b.date).getTime();
-      return dateB - dateA; // Newest first
-    });
+  const filteredTransactions = useMemo(() => {
+    // Start with filtered transactions from store (includes all new filters)
+    let filtered = getFilteredTransactions();
 
     // Apply time period filter (only if a period is selected)
     if (timePeriod && timePeriod !== '') {
@@ -44,26 +37,27 @@ const TransactionTable = ({}: TransactionTableProps = {}) => {
       }
     }
 
-    if (filters.category) {
-      filtered = filtered.filter((t) => t.category === filters.category);
-    }
-
-    if (filters.merchant) {
-      filtered = filtered.filter((t) =>
-        t.merchant.toLowerCase().includes(filters.merchant.toLowerCase())
-      );
-    }
-
-    if (filters.dateFrom) {
-      filtered = filtered.filter((t) => t.date >= filters.dateFrom);
-    }
-
-    if (filters.dateTo) {
-      filtered = filtered.filter((t) => t.date <= filters.dateTo);
-    }
+    // Sort by date (newest first) - use timestamp if available for accurate sorting
+    filtered = filtered.sort((a, b) => {
+      const dateA = a.timestamp ? new Date(a.timestamp).getTime() : new Date(a.date).getTime();
+      const dateB = b.timestamp ? new Date(b.timestamp).getTime() : new Date(b.date).getTime();
+      return dateB - dateA; // Newest first
+    });
 
     return filtered;
-  }, [transactions, filters, timePeriod]);
+  }, [
+    transactions,
+    filters.category,
+    filters.categories,
+    filters.merchant,
+    filters.dateFrom,
+    filters.dateTo,
+    filters.amountMin,
+    filters.amountMax,
+    filters.tags,
+    filters.searchQuery,
+    timePeriod,
+  ]);
 
   // Pagination logic
   const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
@@ -74,7 +68,18 @@ const TransactionTable = ({}: TransactionTableProps = {}) => {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters.category, filters.merchant, filters.dateFrom, filters.dateTo, timePeriod]);
+  }, [
+    filters.category,
+    filters.categories,
+    filters.merchant,
+    filters.dateFrom,
+    filters.dateTo,
+    filters.amountMin,
+    filters.amountMax,
+    filters.tags,
+    filters.searchQuery,
+    timePeriod,
+  ]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

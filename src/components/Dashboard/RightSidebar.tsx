@@ -98,6 +98,54 @@ const RightSidebar = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
+          <Link
+            to="/analytics"
+            className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <svg className="w-5 h-5 text-[#172030]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-[#172030]">
+                Analytics
+              </span>
+            </div>
+            <svg className="w-5 h-5 text-gray-400 group-hover:text-[#172030] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+          <Link
+            to="/goals"
+            className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <svg className="w-5 h-5 text-[#172030]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-[#172030]">
+                Goals
+              </span>
+            </div>
+            <svg className="w-5 h-5 text-gray-400 group-hover:text-[#172030] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+          <Link
+            to="/accounts"
+            className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <svg className="w-5 h-5 text-[#172030]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-[#172030]">
+                Accounts
+              </span>
+            </div>
+            <svg className="w-5 h-5 text-gray-400 group-hover:text-[#172030] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
 

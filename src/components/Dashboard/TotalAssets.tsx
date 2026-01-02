@@ -3,13 +3,17 @@ import { useWalletStore } from '../../store/useWalletStore';
 
 const TotalAssets = () => {
   const accounts = useWalletStore((state) => state.accounts);
+  const getActiveAccounts = useWalletStore((state) => state.getActiveAccounts);
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [selectedAccountId, setSelectedAccountId] = useState<string>('total');
   
+  // Filter out archived accounts
+  const activeAccounts = getActiveAccounts();
+  
   // Get selected account or calculate total
-  const selectedAccount = accounts.find((acc) => acc.id === selectedAccountId);
-  const totalBalance = accounts.length > 0 
-    ? accounts.reduce((sum, acc) => sum + (acc.balance || 0), 0)
+  const selectedAccount = activeAccounts.find((acc) => acc.id === selectedAccountId);
+  const totalBalance = activeAccounts.length > 0 
+    ? activeAccounts.reduce((sum, acc) => sum + (acc.balance || 0), 0)
     : 0;
   
   const displayBalance = selectedAccountId === 'total' 
@@ -18,13 +22,13 @@ const TotalAssets = () => {
 
   // Set default to Main account when accounts load
   useEffect(() => {
-    if (accounts.length > 0 && selectedAccountId === 'total') {
-      const mainAccount = accounts.find((acc) => acc.id === 'main');
+    if (activeAccounts.length > 0 && selectedAccountId === 'total') {
+      const mainAccount = activeAccounts.find((acc) => acc.id === 'main');
       if (mainAccount) {
         setSelectedAccountId('main');
       }
     }
-  }, [accounts]);
+  }, [activeAccounts, selectedAccountId]);
 
   return (
     <div className="space-y-4 md:space-y-6 mb-4 md:mb-6">
@@ -42,7 +46,7 @@ const TotalAssets = () => {
           >
             Total
           </button>
-          {accounts.map((account) => (
+          {activeAccounts.map((account) => (
             <button
               key={account.id}
               onClick={() => setSelectedAccountId(account.id)}

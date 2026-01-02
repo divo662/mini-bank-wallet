@@ -16,13 +16,15 @@ interface DummyUser {
 }
 
 const Transfer = () => {
-  const accounts = useWalletStore((state) => state.accounts);
+  const getActiveAccounts = useWalletStore((state) => state.getActiveAccounts);
   const isLoading = useWalletStore((state) => state.isLoading);
   const error = useWalletStore((state) => state.error);
   const setLoading = useWalletStore((state) => state.setLoading);
   const setError = useWalletStore((state) => state.setError);
   const setAccounts = useWalletStore((state) => state.setAccounts);
   const getAccountById = useWalletStore((state) => state.getAccountById);
+  
+  const activeAccounts = getActiveAccounts();
   const updateAccountBalance = useWalletStore(
     (state) => state.updateAccountBalance
   );
@@ -46,7 +48,7 @@ const Transfer = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const mainAccount = accounts.find((acc) => acc.id === 'main') || accounts[0];
+  const mainAccount = activeAccounts.find((acc) => acc.id === 'main') || activeAccounts[0];
 
   useEffect(() => {
     const loadData = async () => {
@@ -110,12 +112,12 @@ const Transfer = () => {
 
   // Set default from account when accounts are loaded
   useEffect(() => {
-    if (accounts.length > 0 && !formData.fromAccountId) {
+    if (activeAccounts.length > 0 && !formData.fromAccountId) {
       if (mainAccount) {
         setFormData((prev) => ({ ...prev, fromAccountId: mainAccount.id }));
       }
     }
-  }, [accounts, formData.fromAccountId, mainAccount]);
+  }, [activeAccounts, formData.fromAccountId, mainAccount]);
 
   const fromAccount = getAccountById(formData.fromAccountId);
   const toAccount = transferType === 'internal' ? getAccountById(formData.toAccountId) : null;
@@ -466,15 +468,15 @@ const Transfer = () => {
                       backgroundSize: '12px',
                     }}
                   >
-                    {accounts.length === 0 ? (
-                      <option value="">Loading accounts...</option>
-                    ) : (
-                      accounts.map((account) => (
-                        <option key={account.id} value={account.id}>
-                          {account.name} - {formatCurrency(account.balance)}
-                        </option>
-                      ))
-                    )}
+                            {activeAccounts.length === 0 ? (
+                              <option value="">Loading accounts...</option>
+                            ) : (
+                              activeAccounts.map((account) => (
+                                <option key={account.id} value={account.id}>
+                                  {account.name} - {formatCurrency(account.balance)}
+                                </option>
+                              ))
+                            )}
                   </select>
                   {fromAccount && (
                     <p className="mt-2 text-sm text-gray-600">
@@ -506,14 +508,14 @@ const Transfer = () => {
                         backgroundSize: '12px',
                       }}
                     >
-                      <option value="">Select destination account</option>
-                      {accounts
-                        .filter((acc) => acc.id !== formData.fromAccountId)
-                        .map((account) => (
-                          <option key={account.id} value={account.id}>
-                            {account.name} - {formatCurrency(account.balance)}
-                          </option>
-                        ))}
+                              <option value="">Select destination account</option>
+                              {activeAccounts
+                                .filter((acc) => acc.id !== formData.fromAccountId)
+                                .map((account) => (
+                                  <option key={account.id} value={account.id}>
+                                    {account.name} - {formatCurrency(account.balance)}
+                                  </option>
+                                ))}
                     </select>
                   </div>
                 ) : (

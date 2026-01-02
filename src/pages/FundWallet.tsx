@@ -8,12 +8,14 @@ import SuccessModal from '../components/Common/SuccessModal';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 
 const FundWallet = () => {
-  const accounts = useWalletStore((state) => state.accounts);
+  const getActiveAccounts = useWalletStore((state) => state.getActiveAccounts);
   const isLoading = useWalletStore((state) => state.isLoading);
   const error = useWalletStore((state) => state.error);
   const setLoading = useWalletStore((state) => state.setLoading);
   const setError = useWalletStore((state) => state.setError);
   const setAccounts = useWalletStore((state) => state.setAccounts);
+  
+  const activeAccounts = getActiveAccounts();
   const updateAccountBalance = useWalletStore(
     (state) => state.updateAccountBalance
   );
@@ -34,8 +36,8 @@ const FundWallet = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Default to Main account if available
-  const mainAccount = accounts.find((acc) => acc.id === 'main') || accounts[0];
-  const selectedAccount = accounts.find((acc) => acc.id === formData.accountId) || mainAccount;
+  const mainAccount = activeAccounts.find((acc) => acc.id === 'main') || activeAccounts[0];
+  const selectedAccount = activeAccounts.find((acc) => acc.id === formData.accountId) || mainAccount;
 
   // Load accounts on mount
   useEffect(() => {
@@ -87,13 +89,13 @@ const FundWallet = () => {
 
   // Set default account when accounts are loaded
   useEffect(() => {
-    if (accounts.length > 0 && !formData.accountId) {
-      const defaultAccount = accounts.find((acc) => acc.id === 'main') || accounts[0];
+    if (activeAccounts.length > 0 && !formData.accountId) {
+      const defaultAccount = activeAccounts.find((acc) => acc.id === 'main') || activeAccounts[0];
       if (defaultAccount) {
         setFormData((prev) => ({ ...prev, accountId: defaultAccount.id }));
       }
     }
-  }, [accounts, formData.accountId]);
+  }, [activeAccounts, formData.accountId]);
 
   const formatAmount = (value: string): string => {
     // Remove all non-digit characters except decimal point
@@ -181,7 +183,7 @@ const FundWallet = () => {
 
     const accountIdToUse = formData.accountId || (mainAccount?.id || '');
     const amount = parseFloat(formData.amount);
-    const account = accounts.find((acc) => acc.id === accountIdToUse);
+    const account = activeAccounts.find((acc) => acc.id === accountIdToUse);
 
     if (!account) {
       setFormError('Account not found');
@@ -313,15 +315,15 @@ const FundWallet = () => {
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#172030] focus:border-transparent text-base"
                   required
                 >
-                  {accounts.length === 0 ? (
-                    <option value="">Loading accounts...</option>
-                  ) : (
-                    accounts.map((account) => (
-                      <option key={account.id} value={account.id}>
-                        {account.name} - {formatCurrency(account.balance)}
-                      </option>
-                    ))
-                  )}
+                          {activeAccounts.length === 0 ? (
+                            <option value="">Loading accounts...</option>
+                          ) : (
+                            activeAccounts.map((account) => (
+                              <option key={account.id} value={account.id}>
+                                {account.name} - {formatCurrency(account.balance)}
+                              </option>
+                            ))
+                          )}
                 </select>
               </div>
 

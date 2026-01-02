@@ -1,4 +1,6 @@
 import { useState, createContext, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useWalletStore } from '../../store/useWalletStore';
 
 interface MobileMenuContextType {
   closeMenu: () => void;
@@ -18,9 +20,17 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ children }: MobileMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useWalletStore((state) => state.user);
 
   const closeMenu = () => setIsOpen(false);
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const getInitials = () => {
+    if (!user) return 'U';
+    const first = user.firstName?.charAt(0).toUpperCase() || '';
+    const last = user.lastName?.charAt(0).toUpperCase() || '';
+    return first + (last || '');
+  };
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -85,15 +95,32 @@ const MobileMenu = ({ children }: MobileMenuProps) => {
       >
         {/* Mobile Menu Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-[#172030] text-white flex-shrink-0">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-semibold flex-shrink-0">
-              S
-            </div>
+          <Link
+            to="/profile"
+            onClick={closeMenu}
+            className="flex items-center gap-3 min-w-0 flex-1"
+          >
+            {user?.avatar ? (
+              <img
+                src={user.avatar}
+                alt={`${user.firstName} ${user.lastName}`}
+                className="w-10 h-10 rounded-full object-cover border-2 border-white/20 flex-shrink-0"
+              />
+            ) : (
+              <div
+                className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-semibold flex-shrink-0"
+                style={{ backgroundColor: user?.avatarColor || '#172030' }}
+              >
+                {getInitials()}
+              </div>
+            )}
             <div className="min-w-0">
-              <p className="text-sm font-semibold truncate">Saikat</p>
-              <p className="text-xs text-white/80 truncate">Account Holder</p>
+              <p className="text-sm font-semibold truncate">
+                {user?.firstName || 'User'} {user?.lastName || ''}
+              </p>
+              <p className="text-xs text-white/80 truncate">{user?.role || 'Account Holder'}</p>
             </div>
-          </div>
+          </Link>
           <button
             onClick={closeMenu}
             className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"

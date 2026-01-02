@@ -10,7 +10,15 @@ const Header = ({ onSearchChange }: HeaderProps) => {
   const [searchValue, setSearchValue] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const setFilters = useWalletStore((state) => state.setFilters);
+  const user = useWalletStore((state) => state.user);
   const navigate = useNavigate();
+
+  const getInitials = () => {
+    if (!user) return 'U';
+    const first = user.firstName?.charAt(0).toUpperCase() || '';
+    const last = user.lastName?.charAt(0).toUpperCase() || '';
+    return first + (last || '');
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -146,15 +154,26 @@ const Header = ({ onSearchChange }: HeaderProps) => {
             </button>
 
             {/* Avatar */}
-            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden cursor-pointer hover:ring-2 hover:ring-gray-300 transition-all flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-gray-600"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
-            </div>
+            <button
+              onClick={() => navigate('/profile')}
+              className="w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:ring-2 hover:ring-gray-300 transition-all flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#172030]"
+              aria-label="View profile"
+            >
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={`${user.firstName} ${user.lastName}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div
+                  className="w-full h-full flex items-center justify-center text-white font-semibold text-sm"
+                  style={{ backgroundColor: user?.avatarColor || '#172030' }}
+                >
+                  {getInitials()}
+                </div>
+              )}
+            </button>
           </div>
 
           {/* Right Side - Transfer Button */}

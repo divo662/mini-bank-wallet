@@ -75,7 +75,7 @@ npm run preview
    - Overview of all accounts and balances
    - Account switching (Total, Main Account, Savings Account)
    - Balance visibility toggle (show/hide balance)
-   - Quick actions sidebar with links to Fund Wallet, Fund Transfers, and Transactions
+   - Quick actions sidebar with links to Fund Wallet, Fund Transfers, Transactions, Analytics, and Goals
    - Wallet summary showing monthly income, expenses, and net change
    - Transaction list with pagination
    - Advanced filtering by category, merchant, and date range
@@ -88,6 +88,65 @@ npm run preview
    - Search by merchant name
    - Filter by category
    - Date range filtering
+
+6. **Analytics & Insights** (`/analytics`)
+   - Comprehensive spending analysis and visualization
+   - Spending trends line chart (last 30 days)
+   - Category breakdown pie chart
+   - Monthly comparison bar chart (last 6 months)
+   - Advanced spending statistics:
+     - Average transaction amount
+     - Most active day of the week
+     - This month vs last month expenses
+     - Projected monthly spending
+     - Top merchants list
+     - Spending patterns by time of day (morning, afternoon, evening)
+   - Responsive chart layouts
+   - Interactive tooltips with formatted currency values
+
+7. **Goals & Savings Targets** (`/goals`)
+   - Create custom savings goals with target amounts and dates
+   - Link goals to specific accounts
+   - Allocate funds to goals from linked accounts
+   - Withdraw from goals (only after target date is reached)
+   - Progress tracking based on both date and amount
+   - Visual progress bars with color-coded status
+   - Separate views for active and completed goals
+   - Goal completion celebration animations
+   - Date-based and amount-based progress calculation
+   - Automatic goal synchronization with account balances
+   - Formatted amount display with commas and decimals
+
+8. **Account Management** (`/accounts`)
+   - Full CRUD operations for accounts
+   - Create new accounts with custom details
+   - Edit account information (name, type, balance, description)
+   - Archive and unarchive accounts
+   - Delete accounts (with validation to prevent deletion of accounts with goals)
+   - Account customization:
+     - Color coding for visual organization
+     - Icon selection for quick identification
+     - Account number and description fields
+   - Account type selection (checking, savings, investment, etc.)
+   - Real-time balance updates
+   - Responsive grid layout
+
+9. **User Profile Management** (`/profile`)
+   - View and edit user profile information
+   - Update personal details:
+     - First name and last name
+     - Email address
+     - Phone number
+     - Date of birth
+     - Address
+     - Plan and role
+   - Avatar customization:
+     - Upload custom avatar image
+     - Generate avatar with initials and color
+     - Color picker for avatar background
+   - Profile changes reflected across the entire application
+   - Dynamic avatar display in header and sidebar
+   - Form validation and error handling
 
 ### Advanced Features
 
@@ -155,6 +214,8 @@ npm run preview
 - **React Router** - Client-side routing
 - **date-fns** - Date formatting and manipulation
 - **Zod** - Schema validation (for form validation)
+- **Recharts** - Data visualization and charting library
+- **jsPDF** - PDF generation for transaction exports
 
 ## Project Structure
 
@@ -187,14 +248,19 @@ npm run preview
 │   │   ├── Dashboard.tsx
 │   │   ├── FundWallet.tsx
 │   │   ├── Transfer.tsx
-│   │   └── Transactions.tsx
+│   │   ├── Transactions.tsx
+│   │   ├── Analytics.tsx
+│   │   ├── Goals.tsx
+│   │   ├── AccountManagement.tsx
+│   │   └── Profile.tsx
 │   ├── store/                 # State management
 │   │   └── useWalletStore.ts
 │   ├── types/                 # TypeScript types
 │   │   └── index.ts
 │   ├── utils/                 # Utility functions
 │   │   ├── categories.ts
-│   │   └── validation.ts
+│   │   ├── validation.ts
+│   │   └── export.ts          # CSV/PDF export utilities
 │   ├── App.tsx
 │   ├── index.css
 │   └── main.tsx
@@ -226,7 +292,9 @@ When a transfer or funding operation is initiated:
 - Data is stored in localStorage for persistence across sessions
 - Falls back to JSON files if localStorage is empty
 - Automatic synchronization between localStorage and store
-- Transactions and accounts are saved after every update
+- Transactions, accounts, goals, and user profile are saved after every update
+- Goals persist across page refreshes
+- User profile changes are immediately reflected throughout the application
 
 ### Form Validation
 
@@ -246,6 +314,63 @@ All forms include comprehensive validation:
 - Non-blocking error banners for runtime errors
 - Loading states for better UX
 - Graceful degradation when data fails to load
+- Consistent error handling across all pages
+- Loading indicators on all data-fetching operations
+
+### Goals & Savings System
+
+The goals feature implements a comprehensive savings target system:
+
+1. **Goal Creation**: Users can create goals with target amounts and withdrawal dates
+2. **Progress Tracking**: Progress is calculated based on both:
+   - Date progress: Time elapsed towards target date
+   - Amount progress: Funds allocated towards target amount
+   - Overall progress: Average of both metrics
+3. **Allocation**: Funds can be allocated to goals from linked accounts
+4. **Withdrawal**: Withdrawals are only allowed after the target date is reached
+5. **Completion**: Goals are marked complete when both amount and date requirements are met
+6. **Persistence**: All goals are saved to localStorage and persist across sessions
+7. **Synchronization**: Goals automatically sync with account balances
+
+### Data Visualization
+
+The Analytics page provides comprehensive spending insights:
+
+1. **Charts**: Interactive charts using Recharts library
+   - Line chart for spending trends over time
+   - Pie chart for category breakdown
+   - Bar chart for monthly income/expense comparison
+2. **Statistics**: Calculated metrics including:
+   - Average transaction amounts
+   - Most active spending days
+   - Projected monthly spending
+   - Top merchants by transaction volume
+   - Spending patterns by time of day
+3. **Responsive Design**: All charts adapt to different screen sizes
+4. **Formatted Values**: Currency values are properly formatted in tooltips and labels
+
+### Account Management
+
+The account management system provides full control over user accounts:
+
+1. **CRUD Operations**: Create, read, update, and delete accounts
+2. **Customization**: Color coding and icon selection for visual organization
+3. **Archiving**: Archive accounts without deleting them
+4. **Validation**: Prevents deletion of accounts that have active goals
+5. **Real-time Updates**: Changes reflect immediately across the application
+6. **Account Types**: Support for multiple account types (checking, savings, investment, etc.)
+
+### User Profile Management
+
+The profile system allows users to manage their personal information:
+
+1. **Profile Editing**: Update name, email, phone, date of birth, address, plan, and role
+2. **Avatar System**: 
+   - Upload custom avatar images
+   - Generate avatars with user initials and custom colors
+   - Color picker for avatar background customization
+3. **Global Updates**: Profile changes are reflected in header, sidebar, and throughout the app
+4. **Persistence**: Profile data is saved to localStorage and persists across sessions
 
 ## Routes
 
@@ -253,6 +378,10 @@ All forms include comprehensive validation:
 - `/transfer` - Transfer funds between accounts or to external users
 - `/fund-wallet` - Add money to wallet accounts
 - `/transactions` - View all transactions with advanced filtering
+- `/analytics` - Analytics and insights with data visualization charts
+- `/goals` - Goals and savings targets management
+- `/accounts` - Account management with CRUD operations
+- `/profile` - User profile management and settings
 
 ## Security Considerations
 
@@ -310,6 +439,22 @@ The application uses date-fns for:
 - Date comparisons
 - Locale support
 
+## Additional Features
+
+### Export Functionality
+
+- **CSV Export**: Export transactions to CSV format with all details
+- **PDF Export**: Generate PDF reports of transactions with formatting
+- **Date Range Support**: Export filtered transactions or all transactions
+- **Formatted Output**: Properly formatted currency and dates in exports
+
+### Responsive Design Enhancements
+
+- **Mobile-First**: All new features are fully responsive
+- **Touch-Friendly**: Optimized for mobile interactions
+- **Adaptive Layouts**: Charts and tables adapt to screen size
+- **Modal Optimization**: All modals work seamlessly on mobile devices
+
 ## Future Enhancements
 
 If this were a production application, additional features could include:
@@ -317,13 +462,18 @@ If this were a production application, additional features could include:
 1. **Testing**: Unit tests (Jest/Vitest) and integration tests
 2. **Error Boundaries**: React error boundaries for better error handling
 3. **Loading States**: Skeleton loaders for better perceived performance
-4. **Export**: CSV/PDF export of transactions
-5. **Real API**: Integration with actual backend API
-6. **Authentication**: User authentication and authorization
-7. **PWA**: Progressive Web App features for offline support
-8. **Notifications**: Real-time notifications for transactions
-9. **Charts**: Visual representation of spending patterns
-10. **Budgeting**: Budget tracking and alerts
+4. **Real API**: Integration with actual backend API
+5. **Authentication**: User authentication and authorization
+6. **PWA**: Progressive Web App features for offline support
+7. **Notifications**: Real-time notifications for transactions
+8. **Budgeting**: Budget tracking and alerts
+9. **Recurring Transactions**: Set up recurring payments and income
+10. **Transaction Templates**: Quick templates for common transactions
+11. **Multi-Currency Support**: Support for multiple currencies
+12. **Goal Templates**: Pre-defined goal templates for common savings targets
+13. **Advanced Analytics**: More detailed analytics and forecasting
+14. **Transaction Categorization AI**: Automatic transaction categorization
+15. **Bill Reminders**: Reminders for upcoming bills and payments
 
 ## Contributing
 

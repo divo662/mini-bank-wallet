@@ -4,12 +4,13 @@ import Layout from '../components/Layout/Layout';
 import TotalAssets from '../components/Dashboard/TotalAssets';
 import TransactionTable from '../components/Dashboard/TransactionTable';
 import RightSidebar from '../components/Dashboard/RightSidebar';
-import Filters from '../components/Dashboard/Filters';
+// import Filters from '../components/Dashboard/Filters';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 
 const Dashboard = () => {
   const setAccounts = useWalletStore((state) => state.setAccounts);
   const setTransactions = useWalletStore((state) => state.setTransactions);
+  const transactions = useWalletStore((state) => state.transactions);
   const isLoading = useWalletStore((state) => state.isLoading);
   const error = useWalletStore((state) => state.error);
   const setLoading = useWalletStore((state) => state.setLoading);
@@ -65,38 +66,49 @@ const Dashboard = () => {
         setAccounts(accountsData);
 
         // Load transactions from localStorage first, fallback to JSON
-        let transactionsData: any[] = [];
+        // Check if store already has transactions (loaded from localStorage on initialization)
+        const currentTransactions = useWalletStore.getState().transactions;
         
-        try {
-          const stored = localStorage.getItem('wallet_transactions');
-          if (stored) {
-            transactionsData = JSON.parse(stored);
-          } else {
-            // Fallback to JSON file if localStorage is empty
-            const transactionsResponse = await fetch('/transactions.json');
-            if (!transactionsResponse.ok) {
-              throw new Error('Failed to load transactions');
-            }
-            transactionsData = await transactionsResponse.json();
-          }
-        } catch (e) {
-          console.warn('Failed to load transactions from localStorage, trying JSON file', e);
-          // Fallback to JSON file
+        let transactionsData: any[] = [];
+        if (currentTransactions.length > 0) {
+          // Store already has data from localStorage, use it
+          transactionsData = currentTransactions;
+        } else {
           try {
-            const transactionsResponse = await fetch('/transactions.json');
-            if (transactionsResponse.ok) {
+            const stored = localStorage.getItem('wallet_transactions');
+            if (stored) {
+              transactionsData = JSON.parse(stored);
+            } else {
+              // Only fetch from JSON if localStorage is also empty (first time user)
+              const transactionsResponse = await fetch('/transactions.json');
+              if (!transactionsResponse.ok) {
+                throw new Error('Failed to load transactions');
+              }
               transactionsData = await transactionsResponse.json();
+              // Save will be handled by setTransactions
             }
-          } catch (fetchError) {
-            // Transactions are optional, so we don't throw here
-            transactionsData = [];
+          } catch (e) {
+            console.warn('Failed to load transactions from localStorage, trying JSON file', e);
+            // Fallback to JSON file only if localStorage is empty
+            try {
+              const stored = localStorage.getItem('wallet_transactions');
+              if (stored) {
+                transactionsData = JSON.parse(stored);
+              } else {
+                const transactionsResponse = await fetch('/transactions.json');
+                if (transactionsResponse.ok) {
+                  transactionsData = await transactionsResponse.json();
+                }
+              }
+            } catch (fetchError) {
+              // Transactions are optional, so we don't throw here
+              transactionsData = [];
+            }
           }
         }
 
-        // Ensure transactions are set after accounts for running balance calculation
-        if (accountsData.length > 0) {
-          setTransactions(transactionsData);
-        } else {
+        // Only update transactions if they're different
+        if (transactions.length === 0 || JSON.stringify(transactionsData) !== JSON.stringify(transactions)) {
           setTransactions(transactionsData);
         }
 
@@ -161,7 +173,7 @@ const Dashboard = () => {
           <TotalAssets />
 
           {/* Filters */}
-          <Filters />
+          {/* <Filters /> */}
 
           {/* Transaction Table */}
           <TransactionTable />
